@@ -14,8 +14,8 @@ import time
 from random import randint
 
 import pickle
-from MyMovieReview import MoviewReview
-from MyMovieReview import MoviewReviewGenerator
+from MyMovieReview import MovieReview
+from MyMovieReview import MovieReviewGenerator
 
 class Movie:
     """
@@ -383,7 +383,7 @@ if __name__ == "__main__":
     print(wolf_of_wallstreet)
 
     #reading in a movie from pkl. create review generator. read in reviews
-    wolfOfWallStreetReviewGen = MoviewReviewGenerator(wolf_of_wallstreet.title,wolf_of_wallstreet.directlink_url)
+    wolfOfWallStreetReviewGen = MovieReviewGenerator(wolf_of_wallstreet.title,wolf_of_wallstreet.directlink_url)
     wolfOfWallStreetReviewGen.collect_review_urls(numb_reviews=10, start_time=5, stop_time=15, DEBUG=TEST_DEBUG)
 
     list_of_reviews = []
@@ -394,13 +394,13 @@ if __name__ == "__main__":
     
 
     #test out reading in the pickle file and getting reviews that way
-    EXPANDED_PICKLE_FILE=open("/home/magreen/Dropbox/PERSONAL/Documents/Metis/git/Metis_Project2/Movie_populated_objects_4000.pkl","rb")
+    EXPANDED_PICKLE_FILE=open("../Data/Movie_populated_objects_4000.pkl","rb")
 
-    mymoview = pickle.load(EXPANDED_PICKLE_FILE)
-    mymoviewReviewGenerator = MoviewReviewGenerator(mymoview.title, mymoview.directlink_url)
-    mymoviewReviewGenerator.collect_review_urls(numb_reviews=20, start_time=5, stop_time=9, DEBUG=TEST_DEBUG)
+    mymovie = pickle.load(EXPANDED_PICKLE_FILE)
+    mymovieReviewGenerator = MovieReviewGenerator(mymovie.title, mymovie.directlink_url)
+    mymovieReviewGenerator.collect_review_urls(numb_reviews=20, start_time=5, stop_time=9, DEBUG=TEST_DEBUG)
 
-    for myreview in mymoviewReviewGenerator.generate_review(start_time=5, stop_time=7, DEBUG=TEST_DEBUG):
+    for myreview in mymovieReviewGenerator.generate_review(start_time=5, stop_time=7, DEBUG=TEST_DEBUG):
         print(myreview)
         list_of_reviews.append(myreview)
 

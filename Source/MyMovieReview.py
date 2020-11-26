@@ -17,13 +17,14 @@ import requests
 from selenium import webdriver
 from selenium.webdriver.common.keys import Keys
 from selenium.webdriver.chrome.options import Options
+from selenium.common.exceptions import NoSuchElementException
 
 from project5_utils import my_print
 from project5_utils import my_wait
 
 
 
-class MoviewReview:
+class MovieReview:
     """
 
     Class that represents a single movie review
@@ -81,10 +82,10 @@ reviewer_name = {}\nmovie URL = {}\nreview_title = {}\nreview date = {}\n".forma
     
         
 
-class MoviewReviewGenerator:
+class MovieReviewGenerator:
     """
     This class takes a URL to a movie on IMDB
-    and generates objects of the class MoviewReview
+    and generates objects of the class MovieReview
     for that movie.
     """
     ############################################
@@ -223,8 +224,14 @@ class MoviewReviewGenerator:
                 #need to click a button so using selenium
 
                 my_wait(start_time,stop_time)
-                get_more_button = temp_driver.find_element_by_xpath("//*[contains(text(), 'Load More')]")
-                get_more_button.click()
+                
+                try:
+                    get_more_button = temp_driver.find_element_by_xpath("//*[contains(text(), 'Load More')]")
+                    get_more_button.click()
+                except NoSuchElementException:
+                    my_print("No \"Load More\" Button. You're done scraping this movie.", DEBUG, LOG_FILE)
+                    break
+                
                 my_wait(start_time,stop_time)
 
                 #get the HTML for this and parse it into a soup object
@@ -336,7 +343,7 @@ class MoviewReviewGenerator:
             temp_review_date = reviewDateSpan.text
 
             if temp_review_text and temp_review_rating:
-                temp_movie_review = MoviewReview(title=self.title,
+                temp_movie_review = MovieReview(title=self.title,
                                                  reviewlink_url=temp_request_review_url,
                                                  directlink_url=self.movie_url,
                                                  review_text=temp_review_text,
