@@ -41,6 +41,11 @@ if __name__ == "__main__":
     START_TIME = 1
     STOP_TIME = 3
     SAVE_REVIEWS_THRESHOLD = 1000
+
+    #if PICK_UP is a 1 it will find the movie named in LAST_MOVIE
+    #in  POPULATED_MOVIES_PKL_FILE  and rescrape from there
+    PICK_UP = 1
+    MOVIE_TITLE = "Moonlight"
     
     #Note I don't use a parameter for number of movies
     #because I'm reusing a old PKL file that has 4000 movies
@@ -58,14 +63,41 @@ if __name__ == "__main__":
     POPULATED_MOVIES_PKL_FILE = open(populated_movie_file_name,"rb")
 
     review_generator_pkl_file_name = "../Data/Review_Generators.pkl"
-    REVIEW_GENERATORS_PKL_FILE = open(review_generator_pkl_file_name,"wb")
+    
+    if PICK_UP:
+        REVIEW_GENERATORS_PKL_FILE = open(review_generator_pkl_file_name,"ab")
+    else:
+        REVIEW_GENERATORS_PKL_FILE = open(review_generator_pkl_file_name,"wb")        
 
     reviews_file_name = "../Data/Reviews.pkl"
-    REVIEWS_PKL_FILE = open(reviews_file_name, "wb")
+    if PICK_UP:
+        REVIEWS_PKL_FILE = open(reviews_file_name, "ab")
+    else:
+        REVIEWS_PKL_FILE = open(reviews_file_name, "wb")
 
+
+    if PICK_UP:
+        #####################################
+        #
+        # search for movie called MOVIE_TITLE
+        #
+        #####################################
+        while 1:
+            try:
+                temp_start_movie = pickle.load(POPULATED_MOVIES_PKL_FILE)
+
+                if temp_start_movie.title == MOVIE_TITLE:
+                    my_print("Found movie {} picking up from there".format(temp_start_movie.title), DEBUG, LOG_FILE)
+                    break
+            except EOFError:
+                my_print("Error did not find movie with title {} in the populated PKL file! Please check that you actually have it.".format(MOVIE_TITLE), DEBUG, LOG_FILE)
+                exit(1)
+
+    #variables to init before going into while loop
+    first_iteration = 1
     review_count = 0
     save_reviews_threshold = SAVE_REVIEWS_THRESHOLD
-
+                
     while 1:
         #code to enable stoping the tool with a file
         if os.path.isfile("STOP_SCRAPPING.txt"):
@@ -94,8 +126,12 @@ if __name__ == "__main__":
                     
                 my_wait(1,2)
 
+            if first_iteration and PICK_UP:
+                tempmovie = temp_start_movie
+                first_iteration = 0
+            else:
+                tempmovie = pickle.load(POPULATED_MOVIES_PKL_FILE)
                 
-            tempmovie = pickle.load(POPULATED_MOVIES_PKL_FILE)
             tempmovieReviewGenerator = MovieReviewGenerator(tempmovie.title, tempmovie.directlink_url)
             tempmovieReviewGenerator.collect_review_urls(numb_reviews=NUMBER_OF_REVIEWS_PER_MOVIE,
                                                         start_time=START_TIME,
@@ -112,7 +148,7 @@ if __name__ == "__main__":
                 pickle.dump(myreview, REVIEWS_PKL_FILE)
                 review_count += 1
 
-            #on every 1000 reviews close the file to save it
+            #on every SAVE_REVIEWS_THRESHOLD reviews close the file to save it
             if review_count > save_reviews_threshold:
                 my_print("Scraped {} reviews. Saving Movie Review Generator and Reviews PKL Files".format(review_count),
                          DEBUG, LOG_FILE)

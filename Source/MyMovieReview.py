@@ -115,6 +115,10 @@ class MovieReviewGenerator:
         self.chrome_options = Options()
         ##needed to run on the linux machine used to test this code
         self.chrome_options.add_argument("--disable-gpu")
+        self.chrome_options.add_argument("--disable-extensions")
+        self.chrome_options.add_argument("--disable-dev-shm-usage")
+        self.chrome_options.add_argument("--no-sandbox")        
+        
         self.chrome_driver = "/opt/google/chrome/chromedriver"
         
     def collect_review_urls(self, numb_reviews=-1, start_time=10, stop_time=20, DEBUG=0, LOG_FILE=None):
