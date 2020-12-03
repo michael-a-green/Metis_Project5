@@ -38,14 +38,14 @@ if __name__ == "__main__":
     #TODO make this command line options if you get time
     NUMBER_OF_REVIEWS_PER_MOVIE=25
     DEBUG=1
-    START_TIME = 5
-    STOP_TIME = 15
+    START_TIME = 3
+    STOP_TIME = 8
     SAVE_REVIEWS_THRESHOLD = 1000
 
     #if PICK_UP is a 1 it will find the movie named in LAST_MOVIE
     #in  POPULATED_MOVIES_PKL_FILE  and rescrape from there
     PICK_UP = 1
-    MOVIE_TITLE = "You Were Never Really Here"
+    MOVIE_TITLE = "Boyhood"
     
     #Note I don't use a parameter for number of movies
     #because I'm reusing a old PKL file that has 4000 movies
