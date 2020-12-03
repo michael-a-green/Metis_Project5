@@ -135,3 +135,5 @@ dmypy.json
 #ignore ssl keys
 *.pem
 
+#ignore script
+dont_commit_me_setup.sh
