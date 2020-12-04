@@ -267,8 +267,9 @@ class MovieReviewGenerator:
             temp_review_web_response = requests.get(temp_request_review_url)
 
             if temp_review_web_response.status_code != 200:
-                my_print("Error: Web request for review URL {} failed for movie {}".format(temp_request_review_url), 1, LOG_FILE)
+                my_print("Error: Web request for review URL {} failed for movie {}".format(temp_request_review_url, self.title), 1, LOG_FILE)
                 #not returning just going to the next one
+                continue
 
             #convert it to a soup object
             temp_review_web_response_text  = temp_review_web_response.text
