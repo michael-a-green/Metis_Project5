@@ -18,6 +18,7 @@ from selenium import webdriver
 from selenium.webdriver.common.keys import Keys
 from selenium.webdriver.chrome.options import Options
 from selenium.common.exceptions import NoSuchElementException
+from selenium.common.exceptions import ElementNotInteractableException
 
 from project5_utils import my_print
 from project5_utils import my_wait
@@ -235,6 +236,10 @@ class MovieReviewGenerator:
                 except NoSuchElementException:
                     my_print("No \"Load More\" Button. You're done scraping this movie.", DEBUG, LOG_FILE)
                     break
+                except ElementNotInteractableException:
+                    my_print("Could not find \"Load More\" Button. You're done scraping this movie.", DEBUG, LOG_FILE)
+                    break
+                    
                 
                 my_wait(start_time,stop_time)
 
