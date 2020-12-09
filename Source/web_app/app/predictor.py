@@ -43,11 +43,16 @@ CONSTANTS_FILE = open("../../../Data/constants.pkl","rb")
 
 [TRUC_TYPE, PAD_TYPE, OOV_TOK, Max_Length] = pickle.load(CONSTANTS_FILE)
 
-class MyPredictor:
+class MyClassifier:
 
     def __init__(self):
         self.model = load_model("../../../Data/updated_model2_arch_weights")
-        self.wordNetLemmatizer = WordNetLemmatizer()    
+        self.wordNetLemmatizer = WordNetLemmatizer()
+        self.TOKENIZER_FILE = open("../../../Data/project5_tokenizer.pkl","rb")
+        self.tokenizer = pickle.load(self.TOKENIZER_FILE)
+        self.CONSTANTS_FILE = open("../../../Data/constants.pkl","rb")
+        [self.TRUC_TYPE, self.PAD_TYPE, self.OOV_TOK, self.Max_Length] = pickle.load(self.CONSTANTS_FILE)
+        
         if self.model == None:
             print("Error predictor did not load properly!")
 
@@ -101,11 +106,15 @@ class MyPredictor:
 
         return temp_mydoc_lemmatized
 
-    def gen_net_promoter(self,row):
-        if row["review_star_rating"] <= 5:
+    def gen_net_promoter(self,star_rating):
+        """
+        Converts 1-10 / 10 star ranking to a 1-3/3 net promoter score
+        Only works on a single-row data frame
+        """
+        if star_rating <= 5:
             #Detractor
             return 0
-        elif row["review_star_rating"] <= 8:
+        elif star_rating <= 8:
             #Passive
             return 1
         else:
@@ -130,14 +139,57 @@ class MyPredictor:
         data_df["review_text"] = data_df.apply(self.lemmatize_it, axis=1)
         data_df["review_text"] = data_df.apply(lambda x : " ".join(x["review_text"]), axis=1)
         #cheating - just doing a direct conversion
-        data_df["net_promoter_score"] = data_df.apply(self.gen_net_promoter, axis=1)
+        #data_df["net_promoter_score"] = data_df.review_star_rating.apply(self.gen_net_promoter)
 
+        #tokenizer has already been fit so no need to do it again
+        X_train = data_df["review_text"]
+        X_train = np.array(X_train)
+        X_train_seq = self.tokenizer.texts_to_sequences(X_train)
+        X_train_seq_pad = pad_sequences(X_train_seq, maxlen=self.Max_Length, padding=self.PAD_TYPE, truncating=self.TRUC_TYPE)
+        y_pred = self.model.predict(X_train_seq_pad)
+        y_pred = [np.argmax(y_thing) for y_thing in y_pred]
+        y_pred = y_pred[0]
+        return y_pred
 
+        
+################################
+# Test code
+################################
 if __name__ == "__main__":
     mything = {"review_text" : ["This movie was terrible"], "review_title" : ["The worst"], "review_star_rating" : [1] }
     mything_df = pd.DataFrame(mything)
-    apredictor = MyPredictor()
-    apredictor.predict(mything_df)
+    apredictor = MyClassifier()
+    y_pred = apredictor.predict(mything_df)
+    
+    #returns a pandas series
+    y_test = mything_df.review_star_rating.apply( apredictor.gen_net_promoter  )
+    #getting scalar out of pandas series
+    y_test = y_test[0]
+    y_test = y_test
+    
+    print("review title = {}\nreview text =\n{}\nactual = {}\npredicted = {} \n".format(
+        mything_df.loc[0, "review_title"],
+        mything_df.loc[0, "review_text"],
+        y_test,
+        y_pred)
+    )
+
+    assert (y_pred == y_test)
+    
+    mything = {"review_text" : ["This movie was very good"], "review_title" : ["The best"], "review_star_rating" : [9] }
+    mything_df = pd.DataFrame(mything)
+    y_pred = apredictor.predict(mything_df)
+    
+    y_test = mything_df.review_star_rating.apply( apredictor.gen_net_promoter  )
+    y_test = y_test[0]
+    
+    print("review title = {}\nreview text =\n{}\nactual = {}\npredicted = {} \n".format(
+        mything_df.loc[0, "review_title"],
+        mything_df.loc[0, "review_text"],
+        y_test,
+        y_pred)
+    )
+    assert (y_pred == y_test)
 
 
     
