@@ -13,6 +13,18 @@
   {% else %}
   <p>I have seen this review before. Please provide an original review.</p>
   {% endif %}
+  {% if not prediction_performed %}
+  <p>Have not performed a prediction</p>
+  {% else %}
+  {% if prediction_matched %}
+  <p>The predicted score matched your score!</p>
+  {% else %}
+  <p>The predicted score did not matche your score.</p>
+  {% endif %}
+  <p>The model's predicted <a href="https://www.qualtrics.com/experience-management/customer/net-promoter-score/">score: </a>{{ y_pred  }}</p>
+  <p>Your score: </a>{{ y_test }}</p>
+  {% endif %}
+  
   
 </div>
 {{ wtf.quick_form(review_form) }}

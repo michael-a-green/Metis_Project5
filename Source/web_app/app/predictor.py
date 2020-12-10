@@ -39,18 +39,24 @@ import tensorflow.keras.utils as ku
 from tensorflow.keras.models import load_model
 
 #Common constants
-CONSTANTS_FILE = open("../../../Data/constants.pkl","rb")
 
-[TRUC_TYPE, PAD_TYPE, OOV_TOK, Max_Length] = pickle.load(CONSTANTS_FILE)
+
+#CONSTANTS_FILE = open(constants_file_name,"rb")
+
+#[TRUC_TYPE, PAD_TYPE, OOV_TOK, Max_Length] = pickle.load(CONSTANTS_FILE)
 
 class MyClassifier:
 
     def __init__(self):
-        self.model = load_model("../../../Data/updated_model2_arch_weights")
+        model_arch_weights_name = os.getenv("MODEL_ARCH_WEIGHTS")
+        tokenizer_file_name = os.getenv("TOKENIZER_FILE")
+        constants_file_name = os.getenv("CONSTANT_FILE_NAME")
+
+        self.model = load_model(model_arch_weights_name)
         self.wordNetLemmatizer = WordNetLemmatizer()
-        self.TOKENIZER_FILE = open("../../../Data/project5_tokenizer.pkl","rb")
+        self.TOKENIZER_FILE = open(tokenizer_file_name,"rb")
         self.tokenizer = pickle.load(self.TOKENIZER_FILE)
-        self.CONSTANTS_FILE = open("../../../Data/constants.pkl","rb")
+        self.CONSTANTS_FILE = open(constants_file_name,"rb")
         [self.TRUC_TYPE, self.PAD_TYPE, self.OOV_TOK, self.Max_Length] = pickle.load(self.CONSTANTS_FILE)
         
         if self.model == None:
