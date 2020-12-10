@@ -108,6 +108,5 @@ to see a demo you can download a video here:  _Coming Soon!_
 
 * It saves the transactions you enter into the database so that they could be
   used to re-train the model (and hopefully improve it) over time.
-* When you hit the **\[Submit\]** button the web application performs a
-  prediction of whether or not the transaction you entered is
-  fraudulent. This is highlighted in the demonstration video referenced above
+* When you hit the **\[Submit\]** button the web application predicts the net
+  promoter score of the movie review you entered into the web application
