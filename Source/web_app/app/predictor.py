@@ -1,8 +1,8 @@
 import os
 
 #uncomment this if you want to run on your CPU instead of GPU
-#os.environ["CUDA_DEVICE_ORDER"] = "PCI_BUS_ID" 
-#os.environ["CUDA_VISIBLE_DEVICES"] = ""
+os.environ["CUDA_DEVICE_ORDER"] = "PCI_BUS_ID" 
+os.environ["CUDA_VISIBLE_DEVICES"] = ""
 
 import datetime
 from collections import Counter
@@ -53,6 +53,8 @@ class MyClassifier:
         constants_file_name = os.getenv("CONSTANT_FILE_NAME")
 
         self.model = load_model(model_arch_weights_name)
+        #do I have to do this?
+        #self.model._make_predict_function()
         self.wordNetLemmatizer = WordNetLemmatizer()
         self.TOKENIZER_FILE = open(tokenizer_file_name,"rb")
         self.tokenizer = pickle.load(self.TOKENIZER_FILE)
@@ -117,7 +119,7 @@ class MyClassifier:
         Converts 1-10 / 10 star ranking to a 1-3/3 net promoter score
         Only works on a single-row data frame
         """
-        if star_rating <= 5:
+        if star_rating <= 6:
             #Detractor
             return 0
         elif star_rating <= 8:

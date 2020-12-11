@@ -8,21 +8,31 @@
 <div class="page-header">
   <h1>Hello, Please Enter the Fields As indicated below</h1>
 
-  {% if not known %}
-  <p>Never saw this review before! Thanks.</p>
-  {% else %}
-  <p>I have seen this review before. Please provide an original review.</p>
-  {% endif %}
   {% if not prediction_performed %}
+  
   <p>Have not performed a prediction</p>
+  
   {% else %}
-  {% if prediction_matched %}
+  
+  {% if not known %}
+  
+  <p>Never saw this review before! Thanks.</p>
+  
+  {% else %}
+  
+  <p>I have seen this review before. Please provide an original review.</p>
+  
+  {% endif %}
+  
+  {% if y_pred == y_test %}
   <p>The predicted score matched your score!</p>
   {% else %}
-  <p>The predicted score did not matche your score.</p>
+  <p>The predicted score did not match your score.</p>
   {% endif %}
+  
   <p>The model's predicted <a href="https://www.qualtrics.com/experience-management/customer/net-promoter-score/">score: </a>{{ y_pred  }}</p>
   <p>Your score: </a>{{ y_test }}</p>
+
   {% endif %}
   
   

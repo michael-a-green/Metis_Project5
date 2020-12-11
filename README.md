@@ -74,6 +74,7 @@ train and validate the models.
 * scrape_tool.py: The python script that automatically scraped movie
   reviews. It has some exception handling ability. But it also has the ability
   to pick up where it left off.
+* Link_to_Presentation.md: Contains a link to the presentation
 
 
 ## Steps To Reproduce This Project
@@ -104,9 +105,9 @@ to launch the web application
 1. `flask run`
    
 The fields to enter I estimate are likely self explanatory. If you would like
-to see a demo you can download a video here:  _Coming Soon!_
+to see a demo you can download a video here:  [Demo Link](https://tinyurl.com/y5qfvlnv)
 
-* It saves the transactions you enter into the database so that they could be
+* It saves the reviews you enter into the database so that they could be
   used to re-train the model (and hopefully improve it) over time.
 * When you hit the **\[Submit\]** button the web application predicts the net
   promoter score of the movie review you entered into the web application
