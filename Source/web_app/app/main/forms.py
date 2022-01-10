@@ -21,7 +21,7 @@ class ReviewForm(FlaskForm):
     movie_title = StringField("What is the title of the movie?", validators=[DataRequired(),Length(min=1, max=500)])
     review_title = StringField("What is the title for your review?", validators=[DataRequired(),Length(min=1, max=500)])
     #review = StringField("What is your review for the movie??", validators=[DataRequired(),Length(min=1, max=1000)])
-    review = TextAreaField("What did you think of the movie?", validators=[DataRequired(), Length(min=1, max=1000)])
+    review = TextAreaField("What did you think of the movie?", validators=[DataRequired(), Length(min=1, max=5000)])
     user_rating = IntegerField("What is the rating you give for this movie? Please provide a rating between 1 (one of the worst) and 10 (one of the best)", validators=[InputRequired(),NumberRange(min=1,max=10)])
     #movie_rating = IntegerField("what is the traing you give for this movie? Pleae provide a rating 1 0", validators=[InputRequired(),NumberRange(min=1,max=10)])    
 

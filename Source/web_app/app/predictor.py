@@ -1,6 +1,6 @@
 import os
 
-#uncomment this if you want to run on your CPU instead of GPU
+#uncomment this if you want to run on your GPU instead of CPU
 os.environ["CUDA_DEVICE_ORDER"] = "PCI_BUS_ID" 
 os.environ["CUDA_VISIBLE_DEVICES"] = ""
 
